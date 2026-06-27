@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>솔로프리너 해커톤 — PRD 템플릿</title>
+<style>
+  :root{
+    --blue:#2E5C8A; --blue-d:#1F3F5E; --ink:#1c2530; --muted:#6B7280;
+    --line:#dfe6ee; --bg:#f4f7fb; --tint:#eaf1f8; --ok:#1f9d6b;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    line-height:1.6;
+  }
+  .wrap{max-width:880px; margin:0 auto; padding:28px 20px 80px;}
+
+  /* top bar */
+  .toolbar{
+    position:sticky; top:0; z-index:20; display:flex; gap:10px; flex-wrap:wrap;
+    align-items:center; justify-content:space-between;
+    background:rgba(244,247,251,.92); backdrop-filter:blur(6px);
+    padding:12px 4px; margin-bottom:18px; border-bottom:1px solid var(--line);
+  }
+  .toolbar .left{font-weight:700; color:var(--blue-d)}
+  .toolbar .pill{font-size:12px; color:var(--muted); font-weight:500}
+  .btns{display:flex; gap:8px; flex-wrap:wrap}
+  button{
+    font:inherit; font-size:13px; font-weight:600; cursor:pointer;
+    border:1px solid var(--blue); background:#fff; color:var(--blue);
+    padding:8px 14px; border-radius:8px; transition:.15s;
+  }
+  button:hover{background:var(--blue); color:#fff}
+  button.primary{background:var(--blue); color:#fff}
+  button.primary:hover{background:var(--blue-d); border-color:var(--blue-d)}
+  button.ghost{border-color:var(--line); color:var(--muted)}
+  button.ghost:hover{background:#fff; color:var(--ink); border-color:var(--muted)}
+
+  .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:26px 28px; box-shadow:0 1px 3px rgba(20,40,70,.05)}
+
+  header.cover{text-align:center; padding:30px 20px 22px; margin-bottom:18px}
+  header.cover .kicker{color:var(--blue); font-weight:700; letter-spacing:.04em; font-size:14px}
+  header.cover h1{margin:8px 0 6px; font-size:30px; letter-spacing:-.02em}
+  header.cover .sub{color:var(--muted); font-size:14px}
+
+  .meta{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:18px}
+  .meta label{display:block; font-size:12px; color:var(--muted); margin-bottom:4px; font-weight:600}
+  .meta input{width:100%}
+
+  .howto{background:var(--tint); border-left:5px solid var(--blue); border-radius:8px; padding:16px 18px; margin:18px 0}
+  .howto h3{margin:0 0 8px; color:var(--blue); font-size:15px}
+  .howto ul{margin:0; padding-left:18px; font-size:14px; color:#33414f}
+  .howto li{margin:3px 0}
+
+  section.block{margin-top:18px}
+  .sec-head{display:flex; align-items:baseline; gap:10px}
+  .sec-no{
+    flex:none; width:30px; height:30px; border-radius:50%; background:var(--blue);
+    color:#fff; font-weight:700; font-size:14px; display:grid; place-items:center;
+  }
+  .sec-head h2{margin:0; font-size:19px; color:var(--blue-d)}
+  .sec-head .en{font-size:13px; color:var(--muted); font-weight:500}
+  .guide{font-size:13px; color:var(--muted); margin:8px 0 12px 40px; padding:8px 12px; background:#fafcff; border:1px dashed var(--line); border-radius:8px}
+  .fields{margin-left:40px}
+
+  .field{margin-bottom:12px}
+  .field > label{display:block; font-size:13px; font-weight:600; color:#41505f; margin-bottom:4px}
+  input[type=text], textarea{
+    width:100%; font:inherit; font-size:14px; color:var(--ink);
+    border:1px solid var(--line); border-radius:8px; padding:9px 11px; background:#fff; resize:vertical;
+  }
+  input[type=text]:focus, textarea:focus{outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(46,92,138,.12)}
+  textarea{min-height:64px}
+  textarea.lg{min-height:90px}
+  .hint{font-size:12px; color:#9aa6b2; margin-top:3px}
+
+  .twocol{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  .scope-box{border:1px solid var(--line); border-radius:10px; padding:14px}
+  .scope-box.in{border-color:#bfe3cf; background:#f4fcf8}
+  .scope-box.out{border-color:#f2cfcf; background:#fdf6f6}
+  .scope-box h4{margin:0 0 8px; font-size:14px}
+  .scope-box.in h4{color:#1f9d6b}
+  .scope-box.out h4{color:#c0564f}
+
+  .check{margin-left:40px}
+  .check label{display:flex; gap:10px; align-items:flex-start; font-size:14px; padding:6px 0; cursor:pointer}
+  .check input{margin-top:4px; width:16px; height:16px; accent-color:var(--ok)}
+  .check label.done span{color:var(--muted); text-decoration:line-through}
+
+  .save-status{font-size:12px; color:var(--muted)}
+  footer.foot{text-align:center; color:var(--muted); font-size:12px; margin-top:28px}
+
+  /* print */
+  @media print{
+    body{background:#fff}
+    .toolbar, .howto button{display:none !important}
+    .card{border:none; box-shadow:none; padding:0}
+    .wrap{padding:0}
+    input[type=text], textarea{border:none; border-bottom:1px solid #ccc; border-radius:0}
+    textarea{min-height:0}
+    .guide{background:none}
+    section.block{break-inside:avoid}
+  }
+  @media (max-width:640px){
+    .meta{grid-template-columns:1fr} .twocol{grid-template-columns:1fr}
+    .guide,.fields,.check{margin-left:0}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="toolbar">
+    <div class="left">솔로프리너 해커톤 · PRD 템플릿 <span class="pill">자동 저장됨</span></div>
+    <div class="btns">
+      <span class="save-status" id="saveStatus"></span>
+      <button class="primary" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
+      <button class="ghost" onclick="clearAll()">초기화</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <header class="cover">
+      <div class="kicker">PRODUCT REQUIREMENTS DOCUMENT</div>
+      <h1 contenteditable="true" data-key="title">취업자서전 — 취업을 가장 확실하고, 쉽고, 빠르게 하는 법</h1>
+      <div class="sub">솔로프리너 해커톤 제출용 · 1인 개발 기준</div>
+      <div class="meta">
+        <div><label>작성자 / 팀</label><input type="text" data-key="author" value="Paradigm Career" placeholder="이름"></div>
+        <div><label>작성 일자</label><input type="text" data-key="date" value="2026-06-26" placeholder="2026-06-18"></div>
+        <div><label>버전</label><input type="text" data-key="version" value="v5.0" placeholder="v0.1"></div>
+      </div>
+    </header>
+
+    <div class="howto">
+      <h3>이 템플릿 사용법</h3>
+      <ul>
+        <li>각 칸을 클릭해 바로 입력하세요. 입력 내용은 <b>이 브라우저에 자동 저장</b>됩니다(새로고침해도 유지).</li>
+        <li>분량은 1~3페이지면 충분합니다. 길게보다 <b>구체적</b>으로.</li>
+        <li>작성 순서 추천: <b>2.문제 → 3.사용자 → 4.지표 → 5.범위 → 6.흐름 → 7.기술 → 8.리스크 → 1.요약(맨 마지막)</b></li>
+        <li>다 작성하면 우측 상단 <b>인쇄 / PDF 저장</b>으로 제출본을 만드세요.</li>
+      </ul>
+    </div>
+
+    <!-- 1 -->
+    <section class="block">
+      <div class="sec-head"><div class="sec-no">1</div><h2>한 줄 요약 <span class="en">Summary</span></h2></div>
+      <div class="guide">이 제품이 무엇인지 한 문장으로. “[누구]를 위한 [무엇]으로, [어떤 문제]를 [어떻게] 해결한다” 형식.</div>
+      <div class="fields">
+        <div class="field">
+          <textarea data-key="s1" placeholder="예: OO을 위한 OO 도구로, OO 문제를 OO 방식으로 해결한다.">[취업준비생]을 위한 [취업자서전]으로, [‘나를 어떻게 어필해야 할지’ 감을 못 잡아 매번 애매해지는 문제]를, [미친 브레인스토밍으로 ‘진짜 내 강점’을 정확히 찾아 회사마다 최적화하는 방식]으로 해결한다. — 공통 자소서로 ‘세모’가 되지 말고, 자서전 하나로 회사마다 ‘동그라미’가 되는 것.</textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="block">
+      <div class="sec-head"><div class="sec-no">2</div><h2>문제 정의 <span class="en">Problem</span></h2></div>
+      <div class="guide">해결책보다 ‘고통’을 먼저 묘사하세요. 지금 사람들은 이 문제를 어떻게 다루고 있나요(대안)? 그게 왜 불편한가요?</div>
+      <div class="fields">
+        <div class="field"><label>어떤 문제인가</label><textarea data-key="s2a" placeholder="누가, 어떤 상황에서, 어떤 불편을 겪는지">취업은 결혼·연애처럼 ‘서로 Fit이 맞아야’ 되는 매칭이다. 그런데 결혼시장과 결정적으로 다른 게 있다 — 경쟁률이 살벌해서 취준생은 ‘절대적 을’이라는 것.
+나한테 관심 있다는 이성이 100명 있다고 하자. 제일 먼저 걸러지는 건 ‘내 기준에 안 맞는 사람(X)’이다. 그런데 가장 많이 떨어지는 건 X가 아니라 ‘딱히 특별한 매력이 없는 사람(세모)’이다. 이 경쟁을 뚫으려면 애매함을 버리고 ‘나만의 매력’을 보여줘야 한다.
+즉, 세모를 가장 피해야 하는 시장이 바로 취업시장이다. 그런데 정작 본인이 자기를 몰라서, 매번 애매한 세모가 되어 떨어진다.</textarea></div>
+        <div class="field"><label>현재 대안과 그 한계</label><textarea data-key="s2b" placeholder="지금은 어떻게 해결하고 있고, 왜 불충분한지">시중의 자소서·면접 AI는 빠르고 쉽다. 문제는 결괏값이 죄다 ‘세모’라는 것. ‘무난하게 통과될 글’에 최적화돼 있어서, 매력 넘치는 사람들 틈에서 오히려 ‘평범한 사람’으로 만들어버린다. 안 떨어지려고 만든 무난함이, 정작 안 뽑히는 이유가 된다. (= 세모 공장)
+‘마스터 자소서/공통 자소서’ 발상 자체도 함정이다. 모두에게 통하는 글은 결국 누구에게도 안 통한다 — 평균을 낸 얼굴이 매력 없는 무난한 얼굴인 것과 같다. 애초에 모든 기업에 붙을 필요도 없다. 다 붙어도 갈 수 있는 곳은 1곳뿐이고, 2~3곳만 최종합격해 내가 골라 가면 된다. 그러니 눈치 보지 말고 나만의 매력을 뾰족하게 밀어야 한다.</textarea></div>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="block">
+      <div class="sec-head"><div class="sec-no">3</div><h2>목표 사용자 / 페르소나 <span class="en">Target User</span></h2></div>
+      <div class="guide">‘모두’는 아무도 아닙니다. 이름·상황·하루 일과가 그려지는 구체적인 1명을 정하세요.</div>
+      <div class="fields">
+        <div class="field"><label>이름 / 유형</label><input type="text" data-key="s3a" value="이서연, 26세, 문과 복수전공 졸업예정. 스펙(토익·학점·인턴)은 충분한데 ‘내가 남들이랑 뭐가 다른지’를 못 써서, 서류는 붙고 면접만 가면 떨어지는 ‘세모’ 취준생 (실제 컨설팅 사례 기반)" placeholder="예: 지은, 32세, 1인 온라인 공방 운영"></div>
+        <div class="field"><label>사용 환경 / 채널</label><input type="text" data-key="s3b" value="채용 플랫폼에서 자소서 쓰거나 면접 앞두고 진입 · PC/모바일, AI는 챗봇 수준으로만 씀" placeholder="어디서, 어떤 도구로"></div>
+        <div class="field"><label>하루 일과</label><input type="text" data-key="s3c" value="회사마다 자소서를 새로 쓰고, 면접 전엔 1분 자기소개를 매번 새로 외운다. ‘본인의 강점·차별점’ 칸에서 늘 멈춘다" placeholder="제품을 언제 어떻게 쓰게 될지"></div>
+        <div class="field"><label>가장 큰 고통</label><input type="text" data-key="s3d" value="“스펙은 되는데 면접만 가면 떨어져요. 회사마다 새로 쓰는데, 정작 제가 뭐가 특별한지를 모르겠어요”" placeholder="“...” 사용자의 말투로 한 문장"></div>
+        <div class="field"><label>기술 수준</label><input type="text" data-key="s3e" value="비개발자 · AI는 단순 질문 수준으로만 사용" placeholder="예: 비개발자 / 개발자"></div>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="block">
+      <div class="sec-head"><div class="sec-no">4</div><h2>목표와 성공 지표 <span class="en">Goals &amp; Metrics</span></h2></div>
+      <div class="guide">정성 목표(느낌·경험)와 정량 지표(숫자)를 분리하세요. 데모에서 보여줄 지표도 좋습니다.</div>
+      <div class="fields">
+        <div class="field"><label>정성 목표</label><input type="text" data-key="s4a" value="‘세모(애매한 지원자)’가 ‘동그라미(또렷한 매력)’로 바뀐다. 취준생은 ‘나를 찾다 보니 취업이 됐다’, 회사는 ‘많이 고민한, 딱 맞는 사람이 들어왔다’ — 둘 다 웃는다" placeholder="예: 응대 스트레스 감소"></div>
+        <div class="field"><label>핵심 지표 (숫자 포함)</label><input type="text" data-key="s4b" value="세션 끝낸 사람 중 ‘내 차별화를 찾았다 + 이게 다 연결된다(더는 안 애매하다)’ 인정 비율 ≥ 40%" placeholder="예: 첫 응답 시간 6시간 → 1시간"></div>
+        <div class="field"><label>효율 지표 (숫자 포함)</label><input type="text" data-key="s4c" value="흩어진 정보 → 차별화 + 핵심 답변까지 15분 · 자서전 소스는 그대로, 새 회사 최적화는 2분 (처음 한 번만 깊게, 그 뒤론 무한 반복)" placeholder="예: 작업 1건 3분 → 30초"></div>
+        <div class="field"><label>데모 지표</label><input type="text" data-key="s4d" value="같은 자서전 하나로 서로 다른 회사 2곳 지원서가 각각 ‘그 회사에 딱 맞게’ 다르게 나오는 걸 라이브로. 테스터 3명 중 2명이 ‘이건 안 애매하고 뾰족하다’고 평가" placeholder="데모에서 증명할 수치"></div>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section class="block">
+      <div class="sec-head"><div class="sec-no">5</div><h2>핵심 기능 / 범위 <span class="en">Scope: MVP</span></h2></div>
+      <div class="guide">MVP = ‘가장 작게 가치를 증명하는 한 흐름’. 안 만들 것(Out of Scope)을 반드시 적어 시간을 지키세요.</div>
+      <div class="fields twocol">
+        <div class="scope-box in">
+          <h4>✓ 이번에 만든다 (In Scope)</h4>
+          <textarea class="lg" data-key="s5in" placeholder="핵심 기능을 한 줄씩 적으세요&#10;· 기능 1&#10;· 기능 2&#10;· 기능 3">원칙: ‘공통 자소서’가 아니라 ‘자서전 소스(한 번 깊게) + 회사별 최적화(매번 빠르게)’. 목표는 세모를 동그라미로.
+· ① 미친 브레인스토밍 유도 — ‘저는 꼼꼼합니다’ 같은 막연한 말을 안 받아주고 끝까지 파고든다 (가벼운 AI가 못 따라오는 핵심)
+· ② 소재 간 연결 — 흩어진 경험들을 가로질러 하나로 꿴다
+· ③ 차별화 도출 — 장점/강점을 갈라 ‘남과 구분되는 나만의 강점’을 뽑는다 (복붙되면 탈락 = 반바넘)
+· ④ 모든 문항에 적용 — 그 하나로 1분자소·지원동기·차별화·클로징 + 면접 답까지 파생
+· ⑤ 회사별 최적화 — 회사마다 ‘진짜 원하는 것’에 맞춰 자서전에서 Fit한 것만 꺼내 ‘동그라미’ 지원서로
+· 결과물: 재사용 ‘자서전 소스’ 1개 + 회사별 최적화 카드</textarea>
+        </div>
+        <div class="scope-box out">
+          <h4>✕ 이번엔 안 한다 (Out of Scope)</h4>
+          <textarea class="lg" data-key="s5out" placeholder="이번에 제외할 것&#10;· 제외 1&#10;· 제외 2">· 화이트라벨/멀티테넌트·파트너 대시보드 (사업 단계)
+· 전체 막연어 사전·전체 직무/회사 KB (이번엔 시드만)
+· 회사별 문항 전수 자동매칭·산업 지원동기 자동 리서치
+· 로그인·결제·계정, 음성·모바일 앱, 음성 면접 시뮬
+· 교차 학습·데이터 플라이휠</textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="block">
+      <div class="sec-head"><div class="sec-no">6</div><h2>사용자 흐름 / 시나리오 <span class="en">User Flow</span></h2></div>
+      <div class="guide">주인공이 앱을 처음 켜서 가치를 얻기까지를 단계별로. 화면 흐름을 글로 묘사하면 충분합니다.</div>
+      <div class="fields">
+        <div class="field"><textarea class="lg" data-key="s6" placeholder="1) 단계 1&#10;2) 단계 2&#10;3) 단계 3&#10;4) 단계 4">1) 흩어진 나를 다 쏟아낸다 — 장점/강점 구분 없이 10개+ 막 던지기
+2) [①] 막연한 말은 안 받아준다. ‘그때 무슨 생각·기분이었어요?’로 끝까지 파고들어 진짜를 캔다
+3) [②] 캐낸 조각들을 서로 연결해 ‘반복되는 나’를 찾는다
+4) [③] 장점 vs 강점을 갈라 ‘남과 구분되는 차별화’ 하나를 확정 (‘이게 나야’를 본인이 고름)  ※ 여기까지가 자서전 소스(불변)
+5) [④] 그 하나로 1분자소·지원동기·차별화·클로징 + 경험형 답까지 쫙 파생
+6) [⑤] 지원할 회사를 고르면, 그 회사가 진짜 원하는 것에 맞춰 자서전에서 Fit한 것만 꺼내 최적화 → 동그라미 지원서
+7) 회사 추가될 때마다 6번만 반복 — 소스는 그대로, 최적화만 갈아끼우면 끝</textarea></div>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section class="block">
+      <div class="sec-head"><div class="sec-no">7</div><h2>기술 개요 <span class="en">Tech / Architecture</span></h2></div>
+      <div class="guide">스택·AI 모델/API·데이터 흐름을 간단히. 1인 개발이면 ‘기간 내 혼자 가능한가’가 핵심 판단입니다.</div>
+      <div class="fields">
+        <div class="field"><label>프론트엔드</label><input type="text" data-key="s7a" value="Next.js + Tailwind (브레인스토밍 채팅 + 자서전 소스 보드 + 회사별 최적화 카드)" placeholder="예: Next.js + Tailwind"></div>
+        <div class="field"><label>백엔드</label><input type="text" data-key="s7b" value="서버리스 API (대화 상태·파이프라인 오케스트레이션)" placeholder="예: 서버리스 API"></div>
+        <div class="field"><label>AI / 모델</label><input type="text" data-key="s7c" value="LLM API(Claude/GPT). 진짜 핵심은 모델이 아니라 ‘안 받아주고 끝까지 파고드는’ 정책(반아첨·정밀도 게이트·반바넘·회사 Fit 매칭)을 프롬프트+룰로 박는 것" placeholder="사용할 모델·API"></div>
+        <div class="field"><label>데이터 연동</label><input type="text" data-key="s7d" value="시드 ‘은신처 단어 사전’ + 핵심 4종 템플릿 + 시드 ‘직무/회사 진짜요구 KB’(겉역할·진짜역할·원하는 강점) — 수작업, 서버 내장" placeholder="외부 API·데이터 출처"></div>
+        <div class="field"><label>저장소</label><input type="text" data-key="s7e" value="‘자서전 소스’(불변: 차별화·경험)와 ‘회사별 최적화’(가변)를 따로 저장 — 한 번 쓰고 회사마다 재활용" placeholder="DB 등"></div>
+        <div class="field"><label>1인 실현 가능성</label><input type="text" data-key="s7f" value="시드 단어 + 직무/회사 2~3개 + 핵심 4종으로 좁히면 24~48h 1인 가능. 시간은 무조건 ①(파고드는 깊이)에 몰빵 — 여기가 ‘세모를 동그라미로’ 만드는 힘이자 해자. (풀제품은 별도 팀·기간)" placeholder="기간 내 가능한 범위인지 한 줄 판단"></div>
+      </div>
+    </section>
+
+    <!-- 8 -->
+    <section class="block">
+      <div class="sec-head"><div class="sec-no">8</div><h2>리스크 &amp; 향후 계획 <span class="en">Risks &amp; Next</span></h2></div>
+      <div class="guide">가장 큰 가정(아직 검증 안 된 것)과 대응책을 솔직히. 데모 이후 로드맵으로 확장성을 보여주세요.</div>
+      <div class="fields">
+        <div class="field"><label>리스크 &amp; 대응</label><textarea class="lg" data-key="s8a" placeholder="· 리스크 1 → 대응: ...&#10;· 리스크 2 → 대응: ...">· [①위협] AI가 막연한 말에 ‘좋네요!’ 하고 넘어가면 결과는 세모 → 안 받아주는 프롬프트 + 진단 트리 + 정밀도 게이트로 끝까지 유도
+· 바넘(누구한테나 맞는 가짜 강점)=세모 → 후보 3종 + ‘복붙되면 탈락’ + 본인이 ‘이게 나야’ 고르게
+· ‘꾸민 동그라미’ 위험 — 억지로 뾰족하게 만들면 면접서 깨진다(첫인상만 좋은 소개팅) → 무조건 ‘진짜 나’에서 나온 것만, 회사 최적화도 KB ‘진짜 역할’ 기반 + 안 맞으면 솔직히 ‘여긴 약하다’
+· keystone→답들 따로 놀면 일관성 깨짐 → 다 같은 차별화에서 뽑게 강제
+· 끈질긴 질문에 지쳐 이탈 → 매 단계 ‘어, 그게 나였네’ 거울 순간으로 보상</textarea></div>
+        <div class="field"><label>데모 이후 로드맵</label><textarea data-key="s8b" placeholder="· Next: 바로 다음에 할 것&#10;· Later: 더 나중에 할 것">· Next(파일럿): 사전·KB·회사풀 확장, B2C 무료툴로 ‘차별화 발견율·회사별 Fit 만족도’ 측정, 파트너 1곳 PoC. 진짜 성공지표 = 사용자가 2~3곳 최종합격해서 ‘골라 가기’
+· Later(제품): 화이트라벨 API(채용 플랫폼의 ‘자기 발굴 입력층’), 2층 데이터 격리, 비독점 2~3곳, 갱신 운영. 회사 쪽엔 ‘세모 더미’ 대신 ‘동그라미’를 걸러주는 가치. 취준→이직·퍼스널 브랜딩 확장</textarea></div>
+      </div>
+    </section>
+
+    <!-- checklist -->
+    <section class="block">
+      <div class="sec-head"><div class="sec-no" style="background:var(--ok)">✓</div><h2>제출 전 체크리스트</h2></div>
+      <div class="check" id="checklist">
+        <label class="done"><input type="checkbox" data-key="c1" checked><span>한 줄 요약만 읽어도 무엇인지 이해되는가?</span></label>
+        <label class="done"><input type="checkbox" data-key="c2" checked><span>사용자가 ‘구체적인 1명’으로 그려지는가?</span></label>
+        <label class="done"><input type="checkbox" data-key="c3" checked><span>성공 지표에 숫자가 들어 있는가?</span></label>
+        <label class="done"><input type="checkbox" data-key="c4" checked><span>Out of Scope(안 할 것)가 명시돼 있는가?</span></label>
+        <label class="done"><input type="checkbox" data-key="c5" checked><span>정해진 기간(예: 24~48시간) 안에 1명이 만들 수 있는 범위인가?</span></label>
+        <label class="done"><input type="checkbox" data-key="c6" checked><span>데모에서 보여줄 ‘한 흐름’이 분명한가?</span></label>
+        <label class="done"><input type="checkbox" data-key="c7" checked><span>가장 큰 리스크/가정을 솔직히 적었는가?</span></label>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="foot">솔로프리너 해커톤 PRD 템플릿 · 입력 내용은 이 브라우저에만 저장됩니다.</footer>
+</div>
+
+<script>
+  var KEY = "solopreneur_prd_paradigm_v5";
+  var store = {};
+  try { store = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e){ store = {}; }
+
+  var statusEl = document.getElementById("saveStatus");
+  var saveTimer;
+  function flashSaved(){
+    statusEl.textContent = "✓ 저장됨";
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){ statusEl.textContent = ""; }, 1500);
+  }
+  function persist(){
+    localStorage.setItem(KEY, JSON.stringify(store));
+    flashSaved();
+  }
+
+  // collect all keyed elements
+  var els = document.querySelectorAll("[data-key]");
+  els.forEach(function(el){
+    var k = el.getAttribute("data-key");
+    // restore
+    if (k in store){
+      if (el.type === "checkbox"){ el.checked = !!store[k]; toggleDone(el); }
+      else if (el.hasAttribute("contenteditable")){ if(store[k]) el.textContent = store[k]; }
+      else { el.value = store[k]; }
+    }
+    // bind
+    var evt = (el.type === "checkbox") ? "change"
+            : el.hasAttribute("contenteditable") ? "input" : "input";
+    el.addEventListener(evt, function(){
+      if (el.type === "checkbox"){ store[k] = el.checked; toggleDone(el); }
+      else if (el.hasAttribute("contenteditable")){ store[k] = el.textContent.trim(); }
+      else { store[k] = el.value; }
+      persist();
+    });
+  });
+
+  function toggleDone(cb){
+    var lbl = cb.closest("label");
+    if (lbl){ lbl.classList.toggle("done", cb.checked); }
+  }
+
+  function clearAll(){
+    if (!confirm("입력한 모든 내용을 지우고 빈 양식으로 되돌릴까요?")) return;
+    localStorage.removeItem(KEY);
+    location.reload();
+  }
+
+  function autosize(t){ t.style.height='auto'; t.style.height=(t.scrollHeight+2)+'px'; }
+  document.querySelectorAll('textarea').forEach(function(t){ autosize(t); t.addEventListener('input', function(){ autosize(t); }); });
+</script>
+</body>
+</html>
