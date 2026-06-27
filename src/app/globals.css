@@ -59,3 +59,13 @@ body {
 textarea::placeholder {
   color: #7a7a7a;
 }
+
+.cat-card {
+  transition: border-color 0.15s, transform 0.12s;
+}
+.cat-card:hover {
+  border-color: #0066cc;
+}
+.cat-card:active {
+  transform: scale(0.99);
+}
