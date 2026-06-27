@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const steps = [
   { n: "①", t: "미친 브레인스토밍", d: "막연한 말은 안 받아준다. 끝까지 파고들어 '진짜'를 캔다" },
   { n: "②", t: "소재 연결", d: "흩어진 경험을 가로질러 '반복되는 나'를 찾는다" },
@@ -36,6 +38,13 @@ export default function Home() {
         공통 자소서로 <b>세모</b>가 되지 말고, 자서전 하나로 회사마다{" "}
         <b className="text-blue-600 dark:text-blue-400">동그라미</b>가 되는 것.
       </p>
+
+      <Link
+        href="/brainstorm"
+        className="mt-6 inline-block rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700"
+      >
+        미친 브레인스토밍 시작하기 →
+      </Link>
 
       <section className="mt-12">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-black/50 dark:text-white/50">
